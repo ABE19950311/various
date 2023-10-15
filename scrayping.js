@@ -7,6 +7,8 @@ require("dotenv").config();
 const mailFrom = process.env.MAILFROM
 const mailTo = process.env.MAILTO
 
+console.log(mailFrom);
+
 const smtpOption = {
     service:"gmail.com",
     //gmailの場合はservice,他メールサーバはhostで定義する
