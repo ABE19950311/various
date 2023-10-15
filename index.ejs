@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/index.css">
+    <title>Document</title>
+    <script defer src="../index.js"></script>
+</head>
+<body>
+    <%- include('components/header.ejs') %>
+    <%- include('components/new.ejs'); %>
+    <%- include('components/login.ejs') %>
+    <%- include('components/home.ejs') %>
+    <%#
+        const pageMeta = {
+            title:"トップページ",
+            desc:"headerですよ"
+        }
+    %>
+    <%#- include('components/header.ejs',{meta:pageMeta}); %>
+
+    <%#- include("components/footer.ejs"); %>
+</body>
+</html>

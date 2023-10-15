@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/index.css">
+    <title>Document</title>
+    <script defer src="../index.js"></script>
+</head>
+<body>
+    <div id="header">
+    <div>
+        <ul>
+            <li>a</li>
+            <li>b</li>
+            <li>c</li>
+        </ul>
+    </div>
+</div>
+    <div id="newtouroku">
+    <h2>新規会員</h2><br>
+    <div>
+        <label for="">ユーザ</label><input type="text" placeholder="ユーザ名" id="user">
+    </div>
+    <div>
+        <label for="">パスワード</label><input type="password" placeholder="パスワード" id="password">
+    </div>
+    <div onclick="getLoginToken()" id="loginbutton">
+        <button>送信</button>
+    </div>
+    <button onclick="goHome()">ログイン画面へ</button>
+</div>
+    <div id="login">
+    <h2>ログイン</h2><br>
+    <div>
+        <label for="">ユーザ</label><input type="text" placeholder="ユーザ名" id="loginuser">
+    </div>
+    <div>
+        <label for="">パスワード</label><input type="password" placeholder="パスワード" id="loginpassword">
+    </div>
+    <div onclick="isLoggin()" id="loginbutton">
+        <button>ログイン</button>
+    </div>
+    <button onclick="isCreateUser()">新規会員登録へ</button>
+</div>
+    <div id="home">
+    <h2 class="test">工事</h2>
+</div>
+</body>
+</html>
