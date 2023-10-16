@@ -45,13 +45,16 @@ function router(url,requestSessionToken,requestBody,response) {
 }
 
 function apiIsLoggedinCheck(url,requestSessionToken,requestBody,response) {
-    console.log(requestBody)
+    if(requestSessionToken=="") {
+        console.log("session token does not exist");
+        return;
+    }
     const responseBody = {
-        applicationStatusCode: APPLICATION_STATUS_CODE.SUCCESS,
+        applicationStatusCode: "Success",
         applicationMessage: "Success",
         sessionToken: requestSessionToken,
         requestBody: requestBody,
-    }
+    };
     doResponse(response, 200, RESPONSE_HEADER, responseBody)
 }
 
@@ -91,9 +94,6 @@ function getScript(url,requestSessionToken,requestBody,response) {
 
 
 async function apiIsRegisterToken(url,requestSessionToken,requestBody,response) {
-    console.log(requestBody.user)
-    console.log(requestBody.password)
-
     await dbInsert(MONGO_DB_COLLECTIONS.MEMBER_USER,{
         user:requestBody.user,
         password:requestBody.password
@@ -167,21 +167,22 @@ async function dbInsert(collection, obj) {
 }
 
 function doResponse(response, reponseHttpStatusCode, responseHeader, responseBody) {
+    console.log(responseBody)
+    console.log("a")
     response.writeHead(reponseHttpStatusCode,responseHeader);
     response.end(JSON.stringify(responseBody) + "\n");
 }
 
 async function main() {
     function getSessionTokenFromCookie(request) {
-        console.log(request.headers.cookie)
         if(request.headers.cookie==undefined) {
             return "";
         }
-        const result = request.headers.cookie
+        const result = request.headers.cookie.match(/sessionToken=([^;]*)/)
         if(result == null) {
             return "";
         }
-        return result;
+        return result[1];
     }
     db = (await mongoClient.connect(MONGO_DB_END_POINT)).db(MONGO_DB_DB_NAME);
     server = http.createServer(
