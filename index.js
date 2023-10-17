@@ -4,12 +4,15 @@ window.addEventListener("load", async (event) => {
 });
 
 function onCreate() {
-    document.getElementById("newtouroku").hidden = true;
-    document.getElementById("login").hidden = false;
-    document.getElementById("home").hidden = true;
     isAlreadyLoggedin((data)=>{
         if(data) {
-            console.log("loginsumi")
+            document.getElementById("newtouroku").hidden = true;
+            document.getElementById("login").hidden = true;
+            document.getElementById("home").hidden = false;
+        } else {
+            document.getElementById("newtouroku").hidden = true;
+            document.getElementById("login").hidden = false;
+            document.getElementById("home").hidden = true;
         }
     })
 }
