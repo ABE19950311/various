@@ -1,5 +1,10 @@
 
 window.addEventListener("load", async (event) => {
+    const logout = document.getElementById("logout");
+
+    logout.addEventListener("click",()=>{
+        isLoggout()
+    })
     await onCreate();
 });
 
@@ -46,6 +51,10 @@ function goHome() {
     document.getElementById("newtouroku").hidden = true;
     document.getElementById("login").hidden = false;
     document.getElementById("home").hidden = true;
+}
+
+function isLoggout() {
+    console.log("hoge");
 }
 
 function getLoginToken() {
