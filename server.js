@@ -26,15 +26,15 @@ function router(url,requestSessionToken,requestBody,response) {
         case "/":
             getPage(url,requestSessionToken,requestBody,response);
             return;
+        case "/index.js":
+            getPage(url,requestSessionToken,requestBody,response);
+            return;
+        case "/css/index.css":
+            getPage(url,requestSessionToken,requestBody,response);
+            return;
         case "/isLoggedinCheck":
             apiIsLoggedinCheck(url,requestSessionToken,requestBody,response)
             return;
-        case "/index.js":
-            getScript(url,requestSessionToken,requestBody,response);
-            return;
-        case "/css/index.css":
-            getCss(url,requestSessionToken,requestBody,response);
-            return
         case "/isRegissterToken":
             apiIsRegisterToken(url,requestSessionToken,requestBody,response);
             return;
@@ -46,7 +46,7 @@ function router(url,requestSessionToken,requestBody,response) {
 
 function apiIsLoggedinCheck(url,requestSessionToken,requestBody,response) {
     if(requestSessionToken=="") {
-        console.log("session token does not exist");
+        responseProblemSessiionToken(response, "Invalid session token.");
         return;
     }
     const responseBody = {
@@ -59,39 +59,24 @@ function apiIsLoggedinCheck(url,requestSessionToken,requestBody,response) {
 }
 
 function getPage(url,requestSessionToken,requestBody,response) {
+    if(url=="/") {
+        url = "/dest/index.html"
+    }
     const currentDir = process.cwd();
-    fs.readFile(`${currentDir}/dest/index.html`,"utf-8",(error,data)=>{
+    const path = url.split(".").pop()
+    let header = {
+        html:"text/html",
+        css:"text/css",
+        js:"text/javascript"
+    }
+    fs.readFile(`${currentDir}${url}`,"utf-8",(error,data)=>{
         if(!error) {
-            response.writeHead(200, { "Content-Type": "text/html"});
+            response.writeHead(200, { "Content-Type": header[path]});
             response.write(data)
             response.end();
         }
     })
 }
-
-function getCss(url,requestSessionToken,requestBody,response) {
-    const currentDir = process.cwd();
-    fs.readFile(`${currentDir}/css/index.css`,"utf-8",(error,data)=>{
-        if(!error) {
-            response.writeHead(200, { "Content-Type": "text/css"});
-            response.write(data)
-            response.end();
-        }
-    })
-}
-
-function getScript(url,requestSessionToken,requestBody,response) {
-    const currentDir = process.cwd();
-    fs.readFile(`${currentDir}/index.js`,"utf-8",(error,data)=>{
-        if(!error) {
-            response.writeHead(200, { "Content-Type": "text/javascript"});
-            response.write(data)
-            response.end();
-        }
-    })
-}
-
-
 
 async function apiIsRegisterToken(url,requestSessionToken,requestBody,response) {
     await dbInsert(MONGO_DB_COLLECTIONS.MEMBER_USER,{
@@ -107,7 +92,7 @@ async function apiIsRegisterToken(url,requestSessionToken,requestBody,response) 
 
 async function apiIsUserFindCheck(url,requestSessionToken,requestBody,response) {
     if((await isExistUser(requestBody)) == false) {
-        console.log("user not find");
+        responseProblemSessiionToken(response,"User does not exist")
         return;
     }
     const responseHeader = JSON.parse(JSON.stringify(RESPONSE_HEADER));
@@ -168,9 +153,15 @@ async function dbInsert(collection, obj) {
 
 function doResponse(response, reponseHttpStatusCode, responseHeader, responseBody) {
     console.log(responseBody)
-    console.log("a")
     response.writeHead(reponseHttpStatusCode,responseHeader);
     response.end(JSON.stringify(responseBody) + "\n");
+}
+
+function responseProblemSessiionToken(response, applicationMessage) {
+    doResponse(response,200,RESPONSE_HEADER,{
+        applicationStatusCode:"problem_process",
+        applicationMessage: applicationMessage
+    })
 }
 
 async function main() {

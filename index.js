@@ -1,25 +1,32 @@
 
-window.addEventListener("load", async (event) => {
-    const logout = document.getElementById("logout");
-
-    logout.addEventListener("click",()=>{
-        isLoggout()
-    })
-    await onCreate();
+window.addEventListener("DOMContentLoaded", () => {
+    main();
 });
 
-function onCreate() {
+function main() {
+    hiddenAllPages()
     isAlreadyLoggedin((data)=>{
-        if(data) {
-            document.getElementById("newtouroku").hidden = true;
-            document.getElementById("login").hidden = true;
-            document.getElementById("home").hidden = false;
+        if(data.applicationMessage=="Invalid session token.") {
+            appearPage("login")
         } else {
-            document.getElementById("newtouroku").hidden = true;
-            document.getElementById("login").hidden = false;
-            document.getElementById("home").hidden = true;
+            appearPage("home")
         }
     })
+}
+
+function hiddenAllPages() {
+    const pages = document.querySelectorAll(".page_class");
+    pages.forEach((page)=>{
+        page.classList.add("d-none")
+    })
+}
+
+function hiddenPage(page) {
+    document.getElementById(page).classList.add("d-none");
+}
+
+function appearPage(page) {
+    document.getElementById(page).classList.remove("d-none");
 }
 
 function isAlreadyLoggedin(callback) {
@@ -41,16 +48,20 @@ function isAlreadyLoggedin(callback) {
         })
 }
 
+function userLogout() {
+    console.log(document.cookie)
+    document.cookie = "sessionToken=;"
+    main()
+}
+
 function isCreateUser() {
-    document.getElementById("newtouroku").hidden = false;
-    document.getElementById("login").hidden = true;
-    document.getElementById("home").hidden = true;
+    appearPage("newtouroku")
+    hiddenPage("login")
 }
 
 function goHome() {
-    document.getElementById("newtouroku").hidden = true;
-    document.getElementById("login").hidden = false;
-    document.getElementById("home").hidden = true;
+    appearPage("login")
+    hiddenPage("newtouroku")
 }
 
 function isLoggout() {
@@ -71,12 +82,11 @@ function isLoggin() {
     const loginpassword = document.getElementById("loginpassword").value;
 
     isUserRequestFindCheck(loginuser,loginpassword,(data)=>{
-        if(data) {
-            document.getElementById("newtouroku").hidden = true;
-            document.getElementById("login").hidden = true;
-            document.getElementById("home").hidden = false;
-        } else {
+        if(data.applicationMessage=="User does not exist") {
 
+        } else {
+            hiddenPage("login")
+            appearPage("home")
         }
     })
 }
@@ -151,3 +161,7 @@ function requestTest() {
         })
 }
 
+function sendInquiry() {
+    console.log(document.getElementById("inquiry_name").value)
+    console.log(document.getElementById("inquiry_area").value)
+}

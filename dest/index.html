@@ -17,10 +17,9 @@
             <li>c</li>
         </ul>
     </div>
-    <!-- <button onclick="isLoggout()">ログアウトボタン（仮）</button> -->
-    <button id="logout">ログアウトボタン（仮）</button>
+    <button onclick="userLogout()">ログアウトボタン（仮）</button>
 </div>
-    <div id="newtouroku">
+    <div class="page_class" id="newtouroku">
     <h2>新規会員</h2><br>
     <div>
         <label for="">ユーザ</label><input type="text" placeholder="ユーザ名" id="user">
@@ -33,7 +32,7 @@
     </div>
     <button onclick="goHome()">ログイン画面へ</button>
 </div>
-    <div id="login">
+    <div class="page_class" id="login">
     <h2>ログイン</h2><br>
     <div>
         <label for="">ユーザ</label><input type="text" placeholder="ユーザ名" id="loginuser">
@@ -46,8 +45,12 @@
     </div>
     <button onclick="isCreateUser()">新規会員登録へ</button>
 </div>
-    <div id="home">
+    <div class="page_class" id="home">
     <h2 class="test">工事</h2>
+    <h2>問い合わせ</h2>
+    <input type="text" id="inquiry_name">氏名<br>
+    <textarea id="inquiry_area" rows="4" cols="40" placeholder="入力"></textarea><br>
+    <button onclick="sendInquiry()">送信</button>
 </div>
 </body>
 </html>
