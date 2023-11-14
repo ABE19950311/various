@@ -29,23 +29,11 @@ function appearPage(page) {
     document.getElementById(page).classList.remove("d-none");
 }
 
-function isAlreadyLoggedin(callback) {
+async function isAlreadyLoggedin(callback) {
     let url = "http://localhost:3000/isLoggedinCheck"
-    let option = {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        }
-    }
-    fetch(url,option)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-            callback(data)
-        })
-        .catch(e => {
-            console.error(e)
-        })
+    await requestToServer(url,"POST",null,(response)=>{
+        callback(response)
+    })
 }
 
 function userLogout() {
@@ -93,71 +81,42 @@ function isLoggin() {
 
 function isUserRequestFindCheck(loginuser,loginpassword,callback) {
     let url = "http://localhost:3000/isUserFindCheck"
-    let option = {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
+    let body = {
+        "loginuser":loginuser,
+        "loginpassword":loginpassword
+    }
+    requestToServer(url,"POST",body,(response)=>{
+        callback(response)
+    })
+}
+
+function requestToken(user,password,callback) {
+    let url = "http://localhost:3000/isRegissterToken"
+    let body = {
+        "user":user,
+        "password":password
+    }
+    requestToServer(url,"POST",body,(response)=>{
+        callback(response)
+    })
+}
+
+async function requestToServer(url,method,body,callback) {
+    const option = {
+        method: method,
+        headers: {
+            "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            "loginuser":loginuser,
-            "loginpassword":loginpassword
-        })
+        body: JSON.stringify(body)
     }
     fetch(url,option)
         .then(response => response.json())
         .then(data => {
             console.log(data)
-            callback(data);
-        })
-        .catch(e => {
-            console.error(e)
-        })
-}
-
-function requestToken(user,password,callback) {
-    let url = "http://localhost:3000/isRegissterToken"
-    let option = {
-        method:"POST",
-        headers:{
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            "user":user,
-            "password":password
-        })
-    }
-    fetch(url,option)
-        .then(response => response.json())
-        .then(data => {
-            console.log(`${JSON.stringify(data)}`)
             callback(data)
         })
         .catch(e => {
             console.error(e)
-        })
-}
-
-function hoge() {
-    requestTest((response)=>{
-        console.log(response);
-    })
-}
-
-function requestTest() {
-    let url = "http://localhost:3000/test"
-    let option = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    }
-    fetch(url,option)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error(error);
         })
 }
 
