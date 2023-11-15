@@ -2,6 +2,8 @@ const http = require("http");
 const mongoClient = require("mongodb").MongoClient;
 const fs = require("fs");
 const Crypto = require("crypto");
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const RESPONSE_HEADER = {
     "Content-Type": "application/json",
@@ -40,6 +42,9 @@ function router(url,requestSessionToken,requestBody,response) {
             return;
         case "/isUserFindCheck":
             apiIsUserFindCheck(url,requestSessionToken,requestBody,response);
+            return;
+        case "/isSendMail":
+            apiIsSendMail(url,requestSessionToken,requestBody,response);
             return;
     }
 }
@@ -162,6 +167,58 @@ function responseProblemSessiionToken(response, applicationMessage) {
         applicationStatusCode:"problem_process",
         applicationMessage: applicationMessage
     })
+}
+
+async function apiIsSendMail(url,requestSessionToken,requestBody,response) {
+    const getMail = await doSendMail(requestBody.questionerName,requestBody.inquiry)
+    const responseBody = {
+        applicationStatusCode: "Success",
+        applicationMessage: "Success",
+    }
+
+    if(getMail!=0) return
+
+    doResponse(response,200,RESPONSE_HEADER,responseBody);
+}
+
+async function doSendMail(questioner,inquiry) {
+    const smtp_host = "smtp.gmail.com"
+    const smtp_port = 587
+    const smtp_user = process.env.SMTPUSER
+    const smtp_passwd = process.env.SMTPPASSWD
+    const mail_subject = "お問い合わせ"
+    const mail_from = process.env.MAILFROM
+    const mail_to_list = process.env.MAILTOLIST
+    const mail_text = `${questioner}様から問い合わせ${inquiry}`
+
+    const mailOption = {
+        host: smtp_host,
+        port: smtp_port,
+        secure: false,
+        auth : {
+            user: smtp_user,
+            pass: smtp_passwd
+        },
+        tls: {
+            rejectUnauthorized: false,
+        }
+    }
+
+    const body = {
+        from: mail_from,
+        to: mail_to_list,
+        subject: mail_subject,
+        text: mail_text
+    }
+
+    try {
+        const smtp = nodemailer.createTransport(mailOption)
+        await smtp.sendMail(body)
+    } catch(e) {
+        console.error(e)
+    }
+
+    return 0
 }
 
 async function main() {
