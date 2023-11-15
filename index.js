@@ -121,6 +121,10 @@ async function requestToServer(url,method,body,callback) {
 }
 
 function sendInquiry() {
-    console.log(document.getElementById("inquiry_name").value)
-    console.log(document.getElementById("inquiry_area").value)
+    let url = "http://localhost:3000/isSendMail"
+    let body = {
+        questionerName: document.getElementById("inquiry_name").value,
+        inquiry: document.getElementById("inquiry_area").value
+    }
+    requestToServer(url,"POST",body,()=>{})
 }
