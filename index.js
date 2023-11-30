@@ -4,12 +4,13 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 function main() {
-    hiddenAllPages()
+    //hiddenAllPages()
+    addEvents()
     isAlreadyLoggedin((data)=>{
         if(data.applicationMessage=="Invalid session token.") {
-            appearPage("login")
+            appearPage("login_page")
         } else {
-            appearPage("home")
+            appearPage("home_page")
         }
     })
 }
@@ -19,6 +20,15 @@ function hiddenAllPages() {
     pages.forEach((page)=>{
         page.classList.add("d-none")
     })
+}
+
+function addEvents() {
+    document.getElementById("login_btn").addEventListener("click",isLoggin)
+    document.getElementById("user_logout_btn").addEventListener("click",userLogout)
+    document.getElementById("send_inquiry").addEventListener("click",sendInquiry)
+    document.getElementById("create_user_btn").addEventListener("click",isCreateUser)
+    document.getElementById("new_register_btn").addEventListener("click",newRegisterUser)
+    document.getElementById("go_home_btn").addEventListener("click",goHome)
 }
 
 function hiddenPage(page) {
@@ -43,20 +53,16 @@ function userLogout() {
 }
 
 function isCreateUser() {
-    appearPage("newtouroku")
-    hiddenPage("login")
+    appearPage("new_register_page")
+    hiddenPage("login_page")
 }
 
 function goHome() {
-    appearPage("login")
-    hiddenPage("newtouroku")
+    appearPage("login_page")
+    hiddenPage("new_register_page")
 }
 
-function isLoggout() {
-    console.log("hoge");
-}
-
-function getLoginToken() {
+function newRegisterUser() {
     const user = document.getElementById("user").value;
     const password = document.getElementById("password").value;
 
@@ -73,8 +79,8 @@ function isLoggin() {
         if(data.applicationMessage=="User does not exist") {
 
         } else {
-            hiddenPage("login")
-            appearPage("home")
+            hiddenPage("login_page")
+            appearPage("home_page")
         }
     })
 }

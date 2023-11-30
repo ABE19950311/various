@@ -34,6 +34,12 @@ function router(url,requestSessionToken,requestBody,response) {
         case "/css/index.css":
             getPage(url,requestSessionToken,requestBody,response);
             return;
+        case "/node_modules/bootstrap/dist/css/bootstrap.min.css":
+            getPage(url,requestSessionToken,requestBody,response);
+            return;
+        case "/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js":
+            getPage(url,requestSessionToken,requestBody,response);
+            return;
         case "/isLoggedinCheck":
             apiIsLoggedinCheck(url,requestSessionToken,requestBody,response)
             return;
@@ -65,7 +71,7 @@ function apiIsLoggedinCheck(url,requestSessionToken,requestBody,response) {
 
 function getPage(url,requestSessionToken,requestBody,response) {
     if(url=="/") {
-        url = "/dest/index.html"
+        url = "/dist/index.html"
     }
     const currentDir = process.cwd();
     const path = url.split(".").pop()

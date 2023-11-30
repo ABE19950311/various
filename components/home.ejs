@@ -1,7 +1,6 @@
-<div class="page_class" id="home">
-    <h2 class="test">工事</h2>
-    <h2>問い合わせ</h2>
-    <input type="text" id="inquiry_name">氏名<br>
-    <textarea id="inquiry_area" rows="4" cols="40" placeholder="入力"></textarea><br>
-    <button onclick="sendInquiry()">問い合わせ</button>
+<div class="page_class" id="home_page">
+    <%- include('./setupProfile.ejs') %>
+    <%- include('./postArticle.ejs') %>
+    <%- include('./postList.ejs') %>
+    <%- include('./inquiry.ejs') %>
 </div>
