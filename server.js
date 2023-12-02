@@ -31,6 +31,9 @@ function router(url,requestSessionToken,requestBody,response) {
         case "/index.js":
             getPage(url,requestSessionToken,requestBody,response);
             return;
+        case "/class.js":
+            getPage(url,requestSessionToken,requestBody,response);
+            return;
         case "/css/index.css":
             getPage(url,requestSessionToken,requestBody,response);
             return;

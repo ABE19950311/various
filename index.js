@@ -1,10 +1,14 @@
+import * as page from "./class.js";
+
+const login = new page.Login();
+const mail = new page.Mail();
 
 window.addEventListener("DOMContentLoaded", () => {
     main();
 });
 
 function main() {
-    //hiddenAllPages()
+    hiddenAllPages()
     addEvents()
     isAlreadyLoggedin((data)=>{
         if(data.applicationMessage=="Invalid session token.") {
@@ -63,8 +67,8 @@ function goHome() {
 }
 
 function newRegisterUser() {
-    const user = document.getElementById("user").value;
-    const password = document.getElementById("password").value;
+    const user = login.user.value;
+    const password = login.password.value;
 
     requestToken(user,password,(data)=>{
 
@@ -72,8 +76,8 @@ function newRegisterUser() {
 }
 
 function isLoggin() {
-    const loginuser = document.getElementById("loginuser").value;
-    const loginpassword = document.getElementById("loginpassword").value;
+    const loginuser = login.loginuser.value;
+    const loginpassword = login.loginpassword.value;
 
     isUserRequestFindCheck(loginuser,loginpassword,(data)=>{
         if(data.applicationMessage=="User does not exist") {
@@ -129,8 +133,8 @@ async function requestToServer(url,method,body,callback) {
 function sendInquiry() {
     let url = "http://localhost:3000/isSendMail"
     let body = {
-        questionerName: document.getElementById("inquiry_name").value,
-        inquiry: document.getElementById("inquiry_area").value
+        questionerName: mail.questionerName.value,
+        inquiry: mail.inquiry.value
     }
     requestToServer(url,"POST",body,()=>{})
 }
