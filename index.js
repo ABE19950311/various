@@ -3,6 +3,13 @@ import * as page from "./class.js";
 const login = new page.Login();
 const mail = new page.Mail();
 
+const pageObj = {
+    home_page: { id:"home_page" },
+    inquiry_page: { id:"inquiry_page"},
+    login_page: { id:"login_page"},
+    new_register_page: { id:"new_register_page"}
+}
+
 window.addEventListener("DOMContentLoaded", () => {
     main();
 });
@@ -27,20 +34,38 @@ function hiddenAllPages() {
 }
 
 function addEvents() {
-    document.getElementById("login_btn").addEventListener("click",isLoggin)
-    document.getElementById("user_logout_btn").addEventListener("click",userLogout)
-    document.getElementById("send_inquiry").addEventListener("click",sendInquiry)
-    document.getElementById("create_user_btn").addEventListener("click",isCreateUser)
-    document.getElementById("new_register_btn").addEventListener("click",newRegisterUser)
-    document.getElementById("go_home_btn").addEventListener("click",goHome)
+    const btnArray = {
+        home_page: [],
+        inquiry_page: ["send_inquiry"],
+        login_page: ["login_btn","go_home_btn"],
+        new_register_page: ["create_user_btn"]
+    }
+
+    Object.keys(pageObj).forEach((page)=>{
+        btnArray[page].forEach((btn)=>{
+            document.getElementById(btn).addEventListener("click", { page:pageObj[page],handleEvent: displayPage});
+        })
+    })
+    document.getElementById("login_btn").addEventListener("click", isLoggin)
+    document.getElementById("user_logout_btn").addEventListener("click", userLogout)
+    document.getElementById("send_inquiry").addEventListener("click", sendInquiry)
+    document.getElementById("new_register_btn").addEventListener("click", newRegisterUser)
+}
+
+function displayPage(page) {
+    if (this.page) { page = this.page; }
+    console.log(page.id)
+    hiddenAllPages();
+    appearPage(page.id);
 }
 
 function hiddenPage(page) {
     document.getElementById(page).classList.add("d-none");
 }
 
-function appearPage(page) {
-    document.getElementById(page).classList.remove("d-none");
+function appearPage(id) {
+    console.log(id)
+    document.getElementById(id).classList.remove("d-none");
 }
 
 async function isAlreadyLoggedin(callback) {
@@ -54,16 +79,6 @@ function userLogout() {
     console.log(document.cookie)
     document.cookie = "sessionToken=;"
     main()
-}
-
-function isCreateUser() {
-    appearPage("new_register_page")
-    hiddenPage("login_page")
-}
-
-function goHome() {
-    appearPage("login_page")
-    hiddenPage("new_register_page")
 }
 
 function newRegisterUser() {
